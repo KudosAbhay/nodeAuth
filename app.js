@@ -27,7 +27,7 @@ app.get("/", function(req, res){
 });
 
 app.get("/api/auth/:id",tokenGenerator.tokenGenerator);
-app.post("/api/auth",tokenValidator.tokenValidator);
+app.post("/api/auth/verify",tokenValidator.tokenValidator);
 
 //Launch listening server on port 3000
 app.listen(3000, function(){

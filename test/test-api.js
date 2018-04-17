@@ -48,18 +48,9 @@ describe("Testing APIs...", function(){
 				});
 		});
 
-		it("should not provide a valid token for invalid ID", function(){
-			return chai.request(app)
-				.get("/api/auth/any")
-				.then( function(res){
-					expect(res.status).to.equal(200);
-					expect(res.body.response).to.equal("Invalid ID");
-				});
-		});
-
 		it("should provide a valid token for request with valid ID", function(){
 			return chai.request(app)
-				.get("/api/auth/username")
+				.get("/api/auth/abhay")
 				.then( function(res){
 					expect(res).to.be.json;
 					expect(res.status).to.equal(202);
@@ -75,20 +66,20 @@ describe("Testing APIs...", function(){
 
 		it("should invalidate request for empty token", function(){
 			return chai.request(app)
-				.post("/api/auth")
+				.post("/api/auth/verify")
 				.send({
 					"token":""
 				})
 				.then( function(res){
 					expect(res).to.be.json;
-					expect(res.status).to.equal(200);
+					expect(res.status).to.equal(403);
 					expect(res.body.response).to.equal("Invalid Token");
 				});
 		});
 
 		it("should invalidate request for invalid token", function(){
 			return chai.request(app)
-				.post("/api/auth")
+				.post("/api/auth/verify")
 				.send({
 					"token":"hellothere"
 				})
@@ -100,13 +91,14 @@ describe("Testing APIs...", function(){
 
 		it("should validate request for valid token", function(){
 			return chai.request(app)
-				.post("/api/auth")
+				.post("/api/auth/verify")
 				.send({
 					"token":token
 				})
 				.then( function(res){
 					expect(res).to.be.json;
-					expect(res.body.response).to.equal("validated");
+					expect(res.status).to.equal(202);
+					expect(res.body.response).to.equal("valid");
 				});
 		});
 

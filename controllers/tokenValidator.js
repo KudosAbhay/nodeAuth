@@ -6,7 +6,7 @@ var jwt = require("jsonwebtoken");
 /* Will Validate incoming request if authenticated */
 exports.tokenValidator = function(req,res){
 	if(req.body.token == null || req.body.token == " " || req.body.token == ""){
-		res.status(200);
+		res.status(403);
 		res.send({"response": "Invalid Token"});
 	}else{
 		// This will verify a token and direct user to something else
@@ -20,7 +20,8 @@ exports.tokenValidator = function(req,res){
 				default:    res.send({"response": "Unexpected Error Occured"});
 				}
 			}else{
-				res.send({"response": "validated"});
+				res.status(202);
+				res.send({"response": "valid"});
 			}
 		});
 	}
