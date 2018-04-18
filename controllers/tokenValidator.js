@@ -25,6 +25,7 @@ exports.tokenValidator = function(req,res){
 					res.send({"response": err.message});
 					break;
 				default:
+					res.status(500);
 					res.send({"response": "Unexpected Error Occured"});
 				}
 			}else{

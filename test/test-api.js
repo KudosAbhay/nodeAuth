@@ -13,7 +13,7 @@ const app = require("../app.js"); // Our app
 
 var token = "";
 
-describe("check  if server has started on port 3000", function(){
+describe("check if server has started on port 3000", function(){
 	// Set timeout to wait for a response
 	this.timeout(3000);
 
@@ -44,9 +44,22 @@ describe("Testing APIs...", function(){
 				});
 		});
 
+		it("should permit new username entry", function(){
+			return chai.request(app)
+				.post("/users/newuser")
+				.send({
+					"pwd":"newpassword"
+				})
+				.then( function(res){
+					expect(res).to.be.json;
+					expect(res.status).to.equal(202);
+					token = res.body.token;					
+				});
+		});
+
 		it("should not permit same username entry", function(){
 			return chai.request(app)
-				.post("/users/abhay")
+				.post("/users/newuser")
 				.send({
 					"pwd":"anypassword"
 				})
@@ -54,19 +67,6 @@ describe("Testing APIs...", function(){
 					expect(res).to.be.json;
 					expect(res.status).to.equal(403);
 					expect(res.body.response).to.equal("Username already taken");
-				});
-		});
-
-		it("should permit new username entry", function(){
-			return chai.request(app)
-				.post("/users/newuser")
-				.send({
-					"pwd":"newuser"
-				})
-				.then( function(res){
-					expect(res).to.be.json;
-					expect(res.status).to.equal(202);
-					token = res.body.token;					
 				});
 		});
 
@@ -115,6 +115,51 @@ describe("Testing APIs...", function(){
 		});
 
 	}); // test cases for tokenValidator end here
+
+
+	describe("API | updater | userUpdater", function(){
+		// Set timeout to wait for a response
+		this.timeout(3000);
+
+		it("should reject request for empty request", function(){
+			return chai.request(app)
+				.patch("/users/newuser")
+				.send({
+				})
+				.then( function(res){
+					expect(res).to.be.json;
+					expect(res.status).to.equal(403);
+					expect(res.body.response).to.equal("Invalid credentials");
+				});
+		});
+
+		it("should reject request for invalid username", function(){
+			return chai.request(app)
+				.patch("/users/anyname")
+				.send({
+					"pwd":"anypassword"
+				})
+				.then( function(res){
+					expect(res).to.be.json;
+					expect(res.status).to.equal(403);
+					expect(res.body.response).to.equal("Username does not exist");
+				});
+		});
+
+		it("should patch password for valid username", function(){
+			return chai.request(app)
+				.patch("/users/newuser")
+				.send({
+					"pwd":"changedpassword"
+				})
+				.then( function(res){
+					expect(res).to.be.json;
+					expect(res.status).to.equal(202);
+					expect(res.body.response).to.equal("updated successfully");
+				});
+		});
+
+	}); // describe for userUpdater ends here
 
 }); // main describe() ends here
 

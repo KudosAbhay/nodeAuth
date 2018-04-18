@@ -3,6 +3,7 @@
 This app has the following major functionalities -
 - Generation of JWT Tokens
 - Validation of User using using that JWT Token
+- Updation of User password via PATCH Requests
 
 
 ### Endpoint functionality (Public Endpoints)
@@ -17,6 +18,11 @@ This app has the following major functionalities -
 - Returns a Response message mentioning if the request is invalid or successfull for loggin in.
 
 
+##### Updation of Password
+- Using the username existing password can be changed. Existing “uname“ must be present in the request.
+- Returns a Response message mentioning if the request is invalid or successfull for changing user password
+
+
 #### Test Suite 
 - Test suite used is Mocha (https://mochajs.org/) and Instanbul (https://www.npmjs.com/package/istanbul).
 - APIs are able to reject invalid request inputs.
@@ -27,9 +33,14 @@ This app has the following major functionalities -
 - Satisfy all dependencies with ```npm install```
 
 #### Usage
-- Start the server with ```npm start```,
-- Run the test suite with ```npm test```.
+- Start the server with ```npm start```
+- Run the test suite with ```npm test```
 
 ### What's new?
-- Added MySQL Compatibility. Credentials are now stored and retrieved from Database
+- Added MySQL Compatibility. Credentials are now stored and retrieved from MYSQL Database
 - Appropriate statusCodes and responses attached to responses for all APIs
+
+### List of APIs
+- tokenGenerator - To Generate a New Token for new User based on username and password
+- tokenValidator - To Validate if a user is a returning user, dependent on the token provided
+- userUpdater - To update existing user's password based on his / her username

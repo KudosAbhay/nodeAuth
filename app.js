@@ -13,6 +13,7 @@ var app = express();
 
 var tokenGenerator  = require("./controllers/tokenGenerator");
 var tokenValidator  = require("./controllers/tokenValidator");
+var userUpdater 	= require("./controllers/userUpdater");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -23,16 +24,23 @@ app.use(function(req, res, next) {
 	next();
 });
 
-//Define request in root URL (/)
+// Welcome Note on main page (/)
 app.get("/", function(req, res){
 	res.status(202);
 	res.send("Welcome to Node APIs");
 });
 
+// POST Request to generate a new token
 app.post("/users/:id",tokenGenerator.tokenGenerator);
+
+// PATCH Request to update existing user password
+app.patch("/users/:id", userUpdater.userUpdater);
+
+// POST Request to verify existing user using his token
 app.post("/users/token/verify",tokenValidator.tokenValidator);
 
-app.post("/api/dp/pic", function(res, req){
+// POST Request to create thumbnail from received image
+app.post("/users/:id/dp", function(res,req){
 	// thumb({
 	// 	source: req.body, // could be a filename: dest/path/image.jpg
 	// 	destination: "./assets/img/raw",
@@ -53,13 +61,13 @@ app.post("/api/dp/pic", function(res, req){
 });
 
 
-//Launch listening server on port 3000
+// Launch listening server on port 3000
 app.listen(3000, function(){
 	console.log("App is running on port 3000!");
 });
 
 
 /**
- * Export the Express app so that it can be used by Chai
+ * Export the Express app so that it can be used by `Chai` module
  */
 module.exports = app;
