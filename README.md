@@ -20,13 +20,16 @@ This app has the following major functionalities -
 #### Test Suite 
 - Test suite used is Mocha (https://mochajs.org/) and Instanbul (https://www.npmjs.com/package/istanbul).
 - APIs are able to reject invalid request inputs.
-- JSLinting is done using eslint (https://www.npmjs.com/package/eslint).
+- JSLinting is done using eslint (https://www.npmjs.com/package/eslint). Use ```eslint``` <filename> to check for errors
 
 #### Setup
 - Install [eslint](https://www.npmjs.com/package/eslint), [nodemon](https://www.npmjs.com/package/nodemon), and [forever](https://www.npmjs.com/package/forever) globally
-- Satisfy all dependencies with ”npm install”
+- Satisfy all dependencies with ```npm install```
 
 #### Usage
-- Start the server with “npm start”,
-- Run the test suite with “npm test”.
+- Start the server with ```npm start```,
+- Run the test suite with ```npm test```.
 
+### What's new?
+- Added MySQL Compatibility. Credentials are now stored and retrieved from Database
+- Appropriate statusCodes and responses attached to responses for all APIs

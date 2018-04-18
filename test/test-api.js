@@ -32,29 +32,41 @@ describe("Testing APIs...", function(){
 		// Set timeout to wait for a response
 		this.timeout(3000);
     
-		it("should not provide a valid token for vacant request", function(){
+		it("should not provide a valid token for empty password", function(){
 			return chai.request(app)
-				.get("/api/auth/ ")
+				.post("/users/abhay")
+				.send({
+				})
 				.then( function(res){
-					expect(res.status).to.equal(404);
+					expect(res).to.be.json;
+					expect(res.status).to.equal(403);
+					expect(res.body.response).to.equal("Invalid credentials");
 				});
 		});
 
-		it("should not provide a valid token for empty ID", function(){
+		it("should not permit same username entry", function(){
 			return chai.request(app)
-				.get("/api/auth/")
+				.post("/users/abhay")
+				.send({
+					"pwd":"anypassword"
+				})
 				.then( function(res){
-					expect(res.status).to.equal(404);
+					expect(res).to.be.json;
+					expect(res.status).to.equal(403);
+					expect(res.body.response).to.equal("Username already taken");
 				});
 		});
 
-		it("should provide a valid token for request with valid ID", function(){
+		it("should permit new username entry", function(){
 			return chai.request(app)
-				.get("/api/auth/abhay")
+				.post("/users/newuser")
+				.send({
+					"pwd":"newuser"
+				})
 				.then( function(res){
 					expect(res).to.be.json;
 					expect(res.status).to.equal(202);
-					token = res.body.token;
+					token = res.body.token;					
 				});
 		});
 
@@ -66,9 +78,9 @@ describe("Testing APIs...", function(){
 
 		it("should invalidate request for empty token", function(){
 			return chai.request(app)
-				.post("/api/auth/verify")
+				.post("/users/token/verify")
 				.send({
-					"token":""
+					"token":" "
 				})
 				.then( function(res){
 					expect(res).to.be.json;
@@ -79,7 +91,7 @@ describe("Testing APIs...", function(){
 
 		it("should invalidate request for invalid token", function(){
 			return chai.request(app)
-				.post("/api/auth/verify")
+				.post("/users/token/verify")
 				.send({
 					"token":"hellothere"
 				})
@@ -91,7 +103,7 @@ describe("Testing APIs...", function(){
 
 		it("should validate request for valid token", function(){
 			return chai.request(app)
-				.post("/api/auth/verify")
+				.post("/users/token/verify")
 				.send({
 					"token":token
 				})

@@ -6,6 +6,9 @@ var express = require("express");
 // Load bodyParser module using `require`
 var bodyParser = require("body-parser");
 
+// Load thumbnail module using `require`
+var thumb = require("node-thumbnail").thumb;
+
 var app = express();
 
 var tokenGenerator  = require("./controllers/tokenGenerator");
@@ -26,8 +29,29 @@ app.get("/", function(req, res){
 	res.send("Welcome to Node APIs");
 });
 
-app.get("/api/auth/:id",tokenGenerator.tokenGenerator);
-app.post("/api/auth/verify",tokenValidator.tokenValidator);
+app.post("/users/:id",tokenGenerator.tokenGenerator);
+app.post("/users/token/verify",tokenValidator.tokenValidator);
+
+app.post("/api/dp/pic", function(res, req){
+	// thumb({
+	// 	source: req.body, // could be a filename: dest/path/image.jpg
+	// 	destination: "./assets/img/raw",
+	// 	concurrency: 4
+	// }, function(files, err, stdout, stderr) {
+	// 	if(err){
+	// 		res.status(500);
+	// 		res.send({"response": "Internal Server Error"});
+	// 	}else if(stderr){
+	// 		res.status(500);
+	// 		res.send({"response": "Internal Server Error"});
+	// 	}else{
+	// 		res.status(202);
+	// 		res.send({"response": files});
+	// 	}
+
+	// });	
+});
+
 
 //Launch listening server on port 3000
 app.listen(3000, function(){
